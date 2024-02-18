@@ -253,7 +253,7 @@ def infer_amodal_hull(inmodal, bboxes, order_matrix, order_grounded=True):
 
 def infer_order_hull(inmodal):
     num = inmodal.shape[0]
-    order_matrix = np.zeros((num, num), dtype=np.int)
+    order_matrix = np.zeros((num, num), dtype=np.uint8)
     occ_value_matrix = np.zeros((num, num), dtype=np.float32)
     for i in range(num):
         for j in range(i + 1, num):
@@ -271,7 +271,7 @@ def infer_order_hull(inmodal):
 
 def infer_occ_order_area(inmodal, occluder='smaller'):
     num = inmodal.shape[0]
-    order_matrix = np.zeros((num, num), dtype=np.int)
+    order_matrix = np.zeros((num, num), dtype=np.uint8)
     for i in range(num):
         for j in range(i + 1, num):
             if bordering(inmodal[i], inmodal[j]):
@@ -291,7 +291,7 @@ def infer_occ_order_area(inmodal, occluder='smaller'):
 
 def infer_occ_order_yaxis(inmodal, occluder='lower'):
     num = inmodal.shape[0]
-    order_matrix = np.zeros((num, num), dtype=np.int)
+    order_matrix = np.zeros((num, num), dtype=np.uint8)
     for i in range(num):
         for j in range(i + 1, num):
             if bordering(inmodal[i], inmodal[j]):
@@ -310,7 +310,7 @@ def infer_occ_order_yaxis(inmodal, occluder='lower'):
 def infer_depth_order_area(inmodal, closer='smaller'):
     # smaller mask occludes larger mask
     num = inmodal.shape[0]
-    order_matrix = np.zeros((num, num), dtype=np.int)
+    order_matrix = np.zeros((num, num), dtype=np.uint8)
     for i in range(num):
         for j in range(i + 1, num):
             # if bordering(inmodal[i], inmodal[j]):
@@ -330,7 +330,7 @@ def infer_depth_order_area(inmodal, closer='smaller'):
 
 def infer_depth_order_yaxis(inmodal, closer='lower'):
     num = inmodal.shape[0]
-    order_matrix = np.zeros((num, num), dtype=np.int)
+    order_matrix = np.zeros((num, num), dtype=np.uint8)
     for i in range(num):
         for j in range(i + 1, num):
             # if bordering(inmodal[i], inmodal[j]):
@@ -349,8 +349,8 @@ def infer_depth_order_yaxis(inmodal, closer='lower'):
 def infer_order_sup_occ_depth(model, image, inmodal, bboxes, pairs, method, patch_or_image, input_size,
                               disp_select_method):
     num = inmodal.shape[0]
-    depth_order = np.zeros((num, num), dtype=np.int)
-    occ_order = np.zeros((num, num), dtype=np.int)
+    depth_order = np.zeros((num, num), dtype=np.uint8)
+    occ_order = np.zeros((num, num), dtype=np.uint8)
     disp_clipped = None
     for i in range(num):
         for j in range(i + 1, num):
@@ -438,7 +438,7 @@ def infer_order_sup_occ_depth(model, image, inmodal, bboxes, pairs, method, patc
 
 def infer_order_sup_occ(model, image, inmodal, bboxes, pairs, method, patch_or_image, input_size=256, use_rgb=True):
     num = inmodal.shape[0]
-    order_matrix = np.zeros((num, num), dtype=np.int)
+    order_matrix = np.zeros((num, num), dtype=np.uint8)
 
     for i in range(num):
         for j in range(i + 1, num):
@@ -515,7 +515,7 @@ def infer_order_sup_occ(model, image, inmodal, bboxes, pairs, method, patch_or_i
 def infer_order_sup_depth(model, image, inmodal, bboxes, pairs, method, patch_or_image, input_size, disp_select_method,
                           use_rgb=True):
     num = inmodal.shape[0]
-    order_matrix = np.zeros((num, num), dtype=np.int)
+    order_matrix = np.zeros((num, num), dtype=np.uint8)
     have_depth = False
     disp_clipped = None
     for i in range(num):
@@ -630,7 +630,7 @@ def infer_order(model, image, inmodal, category, bboxes, pairs, use_rgb=True, th
     image: HW3, inmodal: NHW, category: N, bboxes: N4
     '''
     num = inmodal.shape[0]
-    order_matrix = np.zeros((num, num), dtype=np.int)
+    order_matrix = np.zeros((num, num), dtype=np.uint8)
     ind = []
     for i in range(num):
         for j in range(i + 1, num):
@@ -720,7 +720,7 @@ def infer_gt_order(inmodal, amodal):
     # inmodal = inmodal.numpy()
     # amodal = amodal.numpy()
     num = inmodal.shape[0]
-    gt_order_matrix = np.zeros((num, num), dtype=np.int)
+    gt_order_matrix = np.zeros((num, num), dtype=np.uint8)
     for i in range(num):
         for j in range(i + 1, num):
             if not bordering(inmodal[i], inmodal[j]):
@@ -807,8 +807,8 @@ def get_neighbors(graph, idx):
 
 
 def get_ancestors(graph, idx):
-    is_ancestor = np.zeros((graph.shape[0],), dtype=np.bool)
-    visited = np.zeros((graph.shape[0],), dtype=np.bool)
+    is_ancestor = np.zeros((graph.shape[0],), dtype=bool)
+    visited = np.zeros((graph.shape[0],), dtype=bool)
     queue = {idx}
     while len(queue) > 0:
         q = queue.pop()
